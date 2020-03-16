@@ -1,8 +1,8 @@
 <p>
-<img alt="react-16.12.0" src="https://img.shields.io/badge/REACT-16.12.0-brightgreen"/>>
+<img alt="react-16.12.0" src="https://img.shields.io/badge/react-16.12.0-brightgreen"/>
 </p>
 <p>
-<img alt="react-dnd-10.0.2" src="https://img.shields.io/badge/REACT--DND-10.0.2-blue"/>
+<img alt="react-dnd-10.0.2" src="https://img.shields.io/badge/react--dnd-10.0.2-blue"/>
 </p>
 
 <h1 align="center">Welcome to Fantasy Card Game 👋</h1>

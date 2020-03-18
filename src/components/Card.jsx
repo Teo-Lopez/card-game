@@ -41,8 +41,11 @@ const Card = props => {
   const CardImage = styled.div`
     width: 100%;
     height: 80%;
-    background: url(${img}) no-repeat center;
-    background-size: contain;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
   `;
 
   return (
@@ -68,7 +71,9 @@ const Card = props => {
           <p>HP: {life}</p>
         </div>
       </CardStats>
-      <CardImage />
+      <CardImage>
+        <img alt={name} src={img} />
+      </CardImage>
     </CardWrapper>
   );
 };

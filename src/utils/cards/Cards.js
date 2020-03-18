@@ -1,6 +1,6 @@
 import midoriya from "../../assets/chars/midoriya.png";
 import leena from "../../assets/chars/leena.png";
-
+import clash from "../../assets/clash.wav";
 class Card {
   constructor(id, name, img, power, maxLife, life) {
     this.id = id;
@@ -9,10 +9,17 @@ class Card {
     this.power = power;
     this.maxLife = maxLife;
     this.life = life;
+    this._clashSound = new Audio(clash);
+  }
+
+  _playSound(sound) {
+    sound.time = 0;
+    sound.play();
   }
 
   attack(card) {
     card.life -= this.power;
+    this._playSound(this._clashSound);
   }
 
   defend(power) {
@@ -31,3 +38,5 @@ export class Leena extends Card {
     super("001", "Leena Inverse", leena, 20, 15, 15);
   }
 }
+
+export const deck01 = [new Midoriya(), new Leena(), new Midoriya(), new Leena(), new Midoriya(), new Leena()];

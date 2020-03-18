@@ -21,7 +21,6 @@ function BoardSection(props) {
     })
   });
 
-  console.log(item, "hey");
   return (
     <>
       <BoardSectionWrapper style={{ backgroundColor: isOver ? "yellow" : "initial" }} ref={cardDropArea}>

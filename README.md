@@ -6,8 +6,13 @@
   <img alt="react-dnd-10.0.2" src="https://img.shields.io/badge/react--dnd-10.0.2-blue"/>
 </p>
 
+<h2>WIP</h2>
+
 > Simple project using react and react-dnd.
 
+<p>This is a personal pet project consistent in a card game Heartstone inspired. <br>
+From a technical point of view it's just a way of learning how to use react hooks and react drag and drop.
+</p>
 ## Install
 
 ```sh

@@ -13,6 +13,7 @@
 <p>This is a personal pet project consistent in a card game Heartstone inspired. <br>
 From a technical point of view it's just a way of learning how to use react hooks and react drag and drop.
 </p>
+
 ## Install
 
 ```sh

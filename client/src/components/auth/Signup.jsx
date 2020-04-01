@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Signup() {
+export default function Signup(props) {
   const classes = useStyles();
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");

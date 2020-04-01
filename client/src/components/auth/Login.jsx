@@ -50,8 +50,8 @@ export default function Login(props) {
 
   const onSubmit = e => {
     e.preventDefault();
-    authService.login({ user, password }).then(theUser => {
-      props.setUser(theUser);
+    authService.login({ user, password }).then(async theUser => {
+      await props.setUser(theUser);
       console.log(theUser);
       props.history.push("/");
     });

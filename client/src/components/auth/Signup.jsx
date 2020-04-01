@@ -49,8 +49,8 @@ export default function Signup(props) {
 
   const onSubmit = e => {
     e.preventDefault();
-    authService.signUp({ user, password }).then(theUser => {
-      props.setUser(theUser);
+    authService.signUp({ user, password }).then(async theUser => {
+      await props.setUser(theUser);
       console.log(theUser);
       props.history.push("/");
     });

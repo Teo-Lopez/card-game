@@ -13,13 +13,12 @@ require("./configs/locals.config")(app);
 require("./configs/session.config")(app);
 app.use(flash());
 
+app.use((req, res) => {
+  res.sendFile(__dirname + "/public/index.html");
+});
 const index = require("./routes/index");
 app.use("/", index);
 
 const authRoutes = require("./routes/auth");
 app.use("/auth", authRoutes);
-
-app.use((req, res) => {
-  res.sendFile(__dirname + "/public/index.html");
-});
 module.exports = app;

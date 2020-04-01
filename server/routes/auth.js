@@ -1,63 +1,102 @@
 const express = require("express");
-const passport = require('passport');
-const router = express.Router();
+const authRoutes = express.Router();
+const passport = require("passport");
+const bcrypt = require("bcrypt");
+
 const User = require("../models/User.model");
 
-// Bcrypt to encrypt passwords
-const bcrypt = require("bcrypt");
-const bcryptSalt = 10;
-
-
-router.get("/login", (req, res, next) => {
-  res.render("auth/login", { "message": req.flash("error") });
-});
-
-router.post("/login", passport.authenticate("local", {
-  successRedirect: "/",
-  failureRedirect: "/auth/login",
-  failureFlash: true,
-  passReqToCallback: true
-}));
-
-router.get("/signup", (req, res, next) => {
-  res.render("auth/signup");
-});
-
-router.post("/signup", (req, res, next) => {
-  const username = req.body.username;
-  const password = req.body.password;
-  if (username === "" || password === "") {
-    res.render("auth/signup", { message: "Indicate username and password" });
+authRoutes.post("/signup", (req, res, next) => {
+  const { username, password, email, perfil } = req.body;
+  if (!username || !password) {
+    res.status(400).json({ message: "Proporcione un nombre y contraseña" });
     return;
   }
 
-  User.findOne({ username }, "username", (err, user) => {
-    if (user !== null) {
-      res.render("auth/signup", { message: "The username already exists" });
+  if (password.length < 6) {
+    res.status(400).json({ message: "La contraseña necesita como mínimo 6 caracteres" });
+    return;
+  }
+
+  User.findOne({ username }, (err, foundUser) => {
+    if (err) {
+      res.status(500).json({ message: "Nombre de usuario no es correcto" });
       return;
     }
 
-    const salt = bcrypt.genSaltSync(bcryptSalt);
+    if (foundUser) {
+      res.status(400).json({ message: "Usuario ya existente. Elija otro" });
+      return;
+    }
+
+    const salt = bcrypt.genSaltSync(10);
     const hashPass = bcrypt.hashSync(password, salt);
 
-    const newUser = new User({
-      username,
-      password: hashPass
+    const aNewUser = new User({
+      username: username,
+      password: hashPass,
+      email: email,
+      perfil: "usuario",
+      pass: password
     });
 
-    newUser.save()
-    .then(() => {
-      res.redirect("/");
-    })
-    .catch(err => {
-      res.render("auth/signup", { message: "Something went wrong" });
-    })
+    aNewUser.save(err => {
+      if (err) {
+        res.status(400).json({ message: "Saving user to database went wrong." });
+        return;
+      }
+
+      req.login(aNewUser, err => {
+        if (err) {
+          res.status(500).json({ message: "Login after signup went bad." });
+          return;
+        }
+
+        res.status(200).json(aNewUser);
+      });
+    });
   });
 });
 
-router.get("/logout", (req, res) => {
-  req.logout();
-  res.redirect("/");
+authRoutes.post("/login", (req, res, next) => {
+  passport.authenticate("local", (err, theUser, failureDetails) => {
+    if (err) {
+      res.status(500).json({ message: "Something went wrong authenticating user" });
+      return;
+    }
+
+    if (!theUser) {
+      res.status(401).json(failureDetails);
+      return;
+    }
+
+    // save user in session
+    req.login(theUser, err => {
+      if (err) {
+        res.status(500).json({ message: "Session save went bad." });
+        return;
+      }
+
+      // We are now logged in (that's why we can also send req.user)
+      res.status(200).json(theUser);
+    });
+  })(req, res, next);
 });
 
-module.exports = router;
+authRoutes.post("/logout", (req, res, next) => {
+  // req.logout() is defined by passport
+  req.logout();
+  res.status(200).json({ message: "Log out success!" });
+});
+
+authRoutes.get("/loggedin", (req, res, next) => {
+  // req.isAuthenticated() is defined by passport
+  if (req.isAuthenticated()) {
+    console.log("sending user", req.user);
+    res.status(200).json(req.user);
+    return;
+  } else {
+    res.status(403).json({ message: "Unauthorized" });
+  }
+});
+
+module.exports = authRoutes;

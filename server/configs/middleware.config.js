@@ -9,5 +9,5 @@ module.exports = app => {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(cookieParser());
-  app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+  app.use(cors({ origin: ["http://localhost:3000", "https://ambarinos-card-game.herokuapp.com"], credentials: true }));
 };

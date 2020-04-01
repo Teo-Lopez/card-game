@@ -49,8 +49,11 @@ export default function Signup() {
 
   const onSubmit = e => {
     e.preventDefault();
-    authService.signUp({ user, password });
-    alert(`Sending data ${password}`);
+    authService.signUp({ user, password }).then(theUser => {
+      props.setUser(theUser);
+      console.log(theUser);
+      props.history.push("/");
+    });
   };
   return (
     <form className={classes.root} noValidate autoComplete="on" onSubmit={onSubmit}>

@@ -11,9 +11,19 @@ const BoardSectionWrapper = styled.div`
 function BoardSection(props) {
   const [{ isOver, isDragging, canDrop, item }, cardDropArea] = useDrop({
     accept: ItemTypes.CARD,
-    drop: (item, algo) => {
+    drop: item => {
       // item.char.attack(props.char);
-      props.children.props.empty ? props.move(item.idx, props.idx) : props.attack(item.idx, props.idx);
+      let isEmpty = props.children.props.empty;
+      let isOwn = props.children.props.own;
+      if (isOwn && isEmpty) {
+        props.move(item.idx, props.idx);
+      } else if (isOwn && !isEmpty) {
+        console.log("It's yours dummy");
+      } else if (!isOwn && !isEmpty) {
+        props.attack(item.idx, props.idx);
+      } else {
+        console.log("No enemy here");
+      }
     },
     collect: mon => ({
       isOver: !!mon.isOver(),

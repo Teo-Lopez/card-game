@@ -6,7 +6,7 @@ const DeckWrapper = styled.div`
   width: 100px;
   height: 160px;
   margin: 0 10px;
-  margin-top: calc(100vh - 160px);
+  /* margin-top: calc(100vh - 160px); */
 `;
 
 const DeckImg = styled.div`

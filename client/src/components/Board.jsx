@@ -12,15 +12,15 @@ import Deck from "./Deck";
 
 const BoardWrapper = styled.div`
   width: 100%;
-  height: 100vh;
+
   background-color: whitesmoke;
   background-image: url(${background});
   background-size: cover;
-  display: flex;
 `;
 
 function Board() {
-  const [ownPositions, setOwnPositions] = useState(Array(8).fill(null));
+  const [enemyPositions, setEnemyPositions] = useState(Array(4).fill(null));
+  const [ownPositions, setOwnPositions] = useState(Array(4).fill(null));
   const [drawedCard, setDrawedCard] = useState(null);
 
   const drawCard = () => {
@@ -49,10 +49,10 @@ function Board() {
   const attack = (idx, newPos) => {
     if (idx === newPos) return;
     // else if()
-    const ownPositionsCopy = [...ownPositions];
-    ownPositionsCopy[idx].attack(ownPositionsCopy[newPos]);
-    const newownPositions = ownPositionsCopy.map(elm => (elm == null || elm.life <= 0 ? null : elm));
-    setOwnPositions(newownPositions);
+    const enemyPositionsCopy = [...enemyPositions];
+    enemyPositionsCopy[idx].attack(enemyPositionsCopy[newPos]);
+    const newEnemyPositions = enemyPositionsCopy.map(elm => (elm == null || elm.life <= 0 ? null : elm));
+    setEnemyPositions(newEnemyPositions);
   };
 
   const move = (idx, newPos) => {
@@ -67,11 +67,20 @@ function Board() {
   return (
     <DndProvider backend={Backend}>
       <BoardWrapper>
-        <Row style={{ width: "100%" }} noGutters={false} className="justify-content-around">
-          {ownPositions.map((elm, idx) => (
+        <Row style={{ width: "100%", paddingTop: "10px" }} noGutters={false} className="justify-content-around">
+          {enemyPositions.map((elm, idx) => (
             <Col md={3}>
               <BoardSection move={move} attack={attack} char={elm} idx={idx} key={idx}>
                 {elm != null ? <Card char={elm} idx={idx}></Card> : <Slot empty idx={idx}></Slot>}
+              </BoardSection>
+            </Col>
+          ))}
+        </Row>
+        <Row style={{ width: "100%", paddingTop: "10px" }} noGutters={false} className="justify-content-around">
+          {ownPositions.map((elm, idx) => (
+            <Col md={3}>
+              <BoardSection move={move} attack={attack} char={elm} idx={idx} key={idx}>
+                {elm != null ? <Card own char={elm} idx={idx}></Card> : <Slot own empty idx={idx}></Slot>}
               </BoardSection>
             </Col>
           ))}

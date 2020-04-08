@@ -2,7 +2,7 @@ import axios from "axios";
 
 export class AuthService {
   constructor() {
-    this.service = axios.create({ baseURL: "https://ambarinos-card-game.herokuapp.com/auth", withCredentials: true });
+    this.service = axios.create({ baseURL: "http://localhost:5000/auth", withCredentials: true });
   }
 
   signUp = ({ user, password }) =>
